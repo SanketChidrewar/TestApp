@@ -3,6 +3,7 @@ using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TestApp.Models.Domain;
+using TestApp.Models.DTO;
 using TestApp.Repositories.Interfaces;
 
 namespace TestApp.Controllers
@@ -25,10 +26,32 @@ namespace TestApp.Controllers
 		{
 			var regions = await regionRepository.GetAllRegionsAsync();
 
-			var regionsDTO = mapper.Map<List<Models.DTO.Region>>(regions);
+            if (regions == null)
+            {
+                return NotFound();
+            }
+
+            var regionsDTO = mapper.Map<List<Models.DTO.Region>>(regions);
 
             return Ok(regionsDTO);
 		}
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        [ActionName("GetRegionAsync")]
+        public async Task<IActionResult> GetRegionAsync(Guid id)
+        {
+            var region = await regionRepository.GetRegionsAsync(id);
+
+            if(region == null)
+            {
+                return NotFound();
+            }
+
+            var regionDTO = mapper.Map<Models.DTO.Region>(region);
+
+            return Ok(regionDTO);
+        }
 
     }
 }

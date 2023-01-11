@@ -20,6 +20,10 @@ namespace TestApp.Repositories.Implementation
 			return await testAppDbContext.Regions.ToListAsync();
 		}
 
-	}
+        public async Task<Region> GetRegionsAsync(Guid id)
+        {
+			return await testAppDbContext.Regions.FirstOrDefaultAsync(x => x.Id.Equals(id));
+        }
+    }
 }
 
